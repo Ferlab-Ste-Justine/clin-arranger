@@ -38,7 +38,7 @@
     "jwt-decode": "^3.1.2",
     "keycloak-connect": "^12.0.3",
     "regenerator-runtime": "^0.13.7",
-    "winston": "^3.3.3"
+    "winston": "^3.6.0"
   },
   "devDependencies": {
     "@arranger/admin": "^2.17.0",
