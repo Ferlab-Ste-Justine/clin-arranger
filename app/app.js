@@ -15,6 +15,7 @@ import { sendForbidden } from "./httpUtils.js";
 import { VARIANTS_READ_PERMISSION_ENFORCER, HPO_READ_PERMISSION_ENFORCER } from "./permissionsUtils.js";
 import variantDonorsHandler from "./controllers/variantDonorsHandler.js"
 import booleanFilterMiddleware from './middlewares/booleanFilterMiddleware.js'
+import variantWithFlagsHandler from './controllers/variantWithFlagsHandler.js'
 
 const app = express();
 
@@ -96,5 +97,7 @@ app.post("*", keycloak.protect(), arrangerGqlSecurityHandler);
 app.use(variantDonorsHandler)
 
 app.use(booleanFilterMiddleware)
+
+app.use(variantWithFlagsHandler)
 
 export default app;

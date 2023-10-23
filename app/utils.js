@@ -17,7 +17,7 @@ export const extractValuesFromContent = (content, field) => {
 }
 
 
-export function extractValuesFromSqonByField(jsonObj, field) {
+export function extractValuesFromSqonByField(sqon, field) {
   const ids = [];
 
   function traverse(obj) {
@@ -32,6 +32,10 @@ export function extractValuesFromSqonByField(jsonObj, field) {
     }
   }
 
-  traverse(jsonObj);
+  traverse(sqon);
   return Array.from(new Set(ids));
+}
+
+export function removeFieldFromSqonByName(sqon, field) {
+  return {...sqon, content: sqon.content.filter(c => c.content.field !== field)};
 }
