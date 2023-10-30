@@ -381,6 +381,6 @@ describe("Extract from SQON nested fields with AND operator", () => {
       ]
     }
 
-    expect(groupNestedFields(initialBody, ['consequences'])).to.eql(expectedBody);
+    expect(groupNestedFields(initialBody, ['consequences', 'donors'])).to.eql(expectedBody);
   })
 });

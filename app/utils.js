@@ -57,14 +57,15 @@ export const extractNestedFields = (obj) => {
   let result = [];
 
   function traverse(node) {
-    if (node.op === "and" || (node.content && Array.isArray(node.content))) {
-      for (let i = 0; i < node.content.length; i++) {
-        traverse(node.content[i]);
+    if (node) {
+      if (node.op === "and" || (node.content && Array.isArray(node.content))) {
+        for (let i = 0; i < node.content.length; i++) {
+          traverse(node.content[i]);
+        }
+      } else if (node.content.field && node.content.field.includes('.')) {
+        result.push(node.content.field);
       }
-    } else if (node.content.field && node.content.field.includes('.')) {
-      result.push(node.content.field);
     }
-
   }
 
   traverse(obj);
@@ -86,14 +87,17 @@ function findObjectsToCombine(json, fields) {
   let toRemove = [];
 
   function traverse(obj) {
-    obj.forEach((o) => {
-      if (o.nested && fields.includes(o.nested.path)) {
-        result.push({field: o.nested.path, values: o.nested.query.bool.must})
-        toRemove.push(o)
-      } else if (o.bool && o.bool.must) {
-        traverse(o.bool.must)
-      }
-    })
+    if(obj){
+      obj.forEach((o) => {
+        if (o.nested && fields.includes(o.nested.path)) {
+          const values = o.nested.query.bool.must || o.nested.query.bool.should
+          result.push({field: o.nested.path, values})
+          toRemove.push(o)
+        } else if (o.bool) {
+          traverse(o.bool.must || o.bool.should)
+        }
+      })
+    }
   }
 
   traverse(json);
@@ -141,7 +145,7 @@ export const groupNestedFields = (initialObj, fields) => {
   fields.forEach((field) => {
     const fieldToCombine = []
       toCombine.forEach((o) => {
-        if(o.field === field) {
+        if(o?.field === field) {
           fieldToCombine.push(o.values)
         }
       })
