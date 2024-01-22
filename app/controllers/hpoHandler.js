@@ -11,7 +11,6 @@ export async function searchHPOAutocomplete(req, res) {
   const { prefix } = params
 
   const client = EsInstance.getInstance();
-  console.log(req.body)
 
   const {body} = await client.search({
     index: indexNameHPO,
